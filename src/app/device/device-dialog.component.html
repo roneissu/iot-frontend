@@ -1,18 +1,18 @@
 <h1 mat-dialog-title>Add device</h1>
-<div mat-dialog-content>
-    <mat-form-field appearance="fill">
+<div mat-dialog-content fxLayout="column">
+    <mat-form-field appearance="outline">
         <mat-label>Name</mat-label>
-        <input matInput [(ngModel)]="data.device.alias_name">
+        <input matInput placeholder="Name" [(ngModel)]="data.device.alias_name">
     </mat-form-field>
-    <mat-form-field appearance="fill">
+    <mat-form-field appearance="outline">
         <mat-label>Serie Number</mat-label>
-        <input matInput [(ngModel)]="data.device.serie_number">
+        <input matInput placeholder="Serie Number" [(ngModel)]="data.device.serie_number">
     </mat-form-field>
-    <mat-form-field appearance="fill">
+    <mat-form-field appearance="outline">
         <mat-label>Firmware</mat-label>
-        <input matInput [(ngModel)]="data.device.firmware_version">
+        <input matInput placeholder="Firmware" [(ngModel)]="data.device.firmware_version">
     </mat-form-field>
-    <mat-form-field appearance="fill">
+    <mat-form-field appearance="outline">
         <mat-label>Type</mat-label>
         <mat-select [(ngModel)]="data.device.device_type">
             <mat-option *ngFor="let device_type of data.device_types" [value]="device_type.id">
@@ -22,6 +22,6 @@
     </mat-form-field>
 </div>
 <div mat-dialog-actions>
-    <button mat-button (click)="onNoClick()">Cancel</button>
-    <button mat-button [mat-dialog-close]="data.device" cdkFocusInitial>Ok</button>
+    <button mat-flat-button color="warn" (click)="onNoClick()">Cancel</button>
+    <button mat-flat-button color="primary" [mat-dialog-close]="data.device" cdkFocusInitial>Ok</button>
 </div>

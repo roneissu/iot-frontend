@@ -5,6 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
+import { ToastsContainer } from './toast/toast.component';
 import { HomeModule } from './home/home.module';
 import { DeviceModule } from './device/device.module';
 import { ConfigModule } from './config/config.module';
@@ -26,7 +27,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    ToastsContainer
   ],
   imports: [
     BrowserModule,

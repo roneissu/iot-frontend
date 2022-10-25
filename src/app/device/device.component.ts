@@ -2,12 +2,35 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Subject, takeUntil } from 'rxjs';
+import { ToastService } from '../toast/toast.service';
 import { Device, DeviceType } from './device';
 import { DeviceService } from './device.service';
 
 export interface DialogData {
   device: Device,
   device_types: DeviceType[]
+}
+
+@Component({
+  selector: 'app-confirm-dialog',
+  template: `
+    <h1 mat-dialog-title>{{data}}</h1>
+    <div mat-dialog-actions>
+      <button mat-flat-button color="primary" (click)="onNoClick()">Cancel</button>
+      <button mat-flat-button color="warn" [mat-dialog-close]="true" cdkFocusInitial>Delete</button>
+    </div>
+  `,
+  styleUrls: ['./device.component.scss']
+})
+export class ConfirmDialogComponent {
+  constructor(
+    public dialogRef: MatDialogRef<ConfirmDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: string,
+  ) { }
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
 }
 
 @Component({
@@ -44,7 +67,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
   currentScreenSize: number | undefined;
 
   displayedColumns: string[] = ['name', 'field_type'];
-  deviceList: Device[] = [];
+  deviceList: Device[] | undefined;
   deviceTypeList: DeviceType[] = [];
 
   displayNameMap = new Map([
@@ -58,7 +81,8 @@ export class DeviceComponent implements OnInit, OnDestroy {
   constructor(
     private deviceService: DeviceService,
     public dialog: MatDialog,
-    private breakpointObserver: BreakpointObserver
+    private breakpointObserver: BreakpointObserver,
+    private toastService: ToastService
   ) {
   }
 
@@ -95,20 +119,21 @@ export class DeviceComponent implements OnInit, OnDestroy {
   }
 
   deleteOneDevice(device: Device) {
-    if(device.id !== undefined) {
-      this.deviceService.deleteOne(device.id)
-        .subscribe(() => this.getAllDevices())
-    }
-  }
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: `Delete ${device.alias_name}?`
+    });
 
-  addOneDevice(device: Device) {
-    this.deviceService.addOne(device)
-      .subscribe((data: Device) => {
-        let idx = this.deviceList.findIndex((d) => d.id === device.id);
-        if (idx === undefined) {
-          this.deviceList.push(data);
-        } else {
-          this.deviceList[idx] = data;
+    dialogRef.afterClosed()
+      .subscribe((result: boolean) => {
+        if (result !== undefined) {
+          if (device.id !== undefined) {
+            let device_name = device.alias_name;
+            this.deviceService.deleteOne(device.id)
+              .subscribe(() => {
+                this.getAllDevices();
+                this.toastService.showSuccess(`Device \"${device_name}\" deleted with success!`);
+              })
+          }
         }
       });
   }
@@ -133,6 +158,9 @@ export class DeviceComponent implements OnInit, OnDestroy {
   getDevice(id: number) {
     this.deviceService.getOne(id)
       .subscribe((data: Device) => {
+        if (this.deviceList === undefined) {
+          this.deviceList = [];
+        }
         this.deviceList.push({
           id: data.id,
           alias_name: data.alias_name,
@@ -153,23 +181,29 @@ export class DeviceComponent implements OnInit, OnDestroy {
       },
       device_types: this.deviceTypeList
     }
-    if(device !== null) {
+    if (device !== null) {
       dialog_data.device = device;
     }
     const dialogRef = this.dialog.open(DeviceDialogComponent, {
-      width: '250px',
+      width: '500px',
       data: dialog_data
     });
 
     dialogRef.afterClosed()
       .subscribe((result: Device) => {
-        if(result !== undefined) {
-          if(result.id === undefined) {
+        if (result !== undefined) {
+          if (result.id === undefined) {
             this.deviceService.addOne(result)
-              .subscribe(() => { this.getAllDevices() })
+              .subscribe(() => {
+                this.getAllDevices();
+                this.toastService.showSuccess(`Device \"${result.alias_name}\" added with success!`);
+              })
           } else {
             this.deviceService.patchOne(result.id, result)
-              .subscribe(() => { this.getAllDevices() })
+              .subscribe(() => {
+                this.getAllDevices();
+                this.toastService.showSuccess(`Device \"${result.alias_name}\" edited with success!`);
+              })
           }
         }
       });

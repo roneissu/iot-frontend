@@ -2,14 +2,12 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { DeviceRoutingModule } from './device-routing.module';
-import { DeviceComponent, DeviceDialogComponent } from './device.component';
+import { DeviceComponent, DeviceDialogComponent, ConfirmDialogComponent } from './device.component';
 
 import { MatCardModule } from '@angular/material/card';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDividerModule } from '@angular/material/divider';
 import { MatTableModule } from '@angular/material/table';
-import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -23,17 +21,16 @@ import { FormsModule } from '@angular/forms';
 @NgModule({
   declarations: [
     DeviceComponent,
-    DeviceDialogComponent
+    DeviceDialogComponent,
+    ConfirmDialogComponent
   ],
   imports: [
     CommonModule,
     DeviceRoutingModule,
     MatCardModule,
     MatButtonModule,
-    MatDividerModule,
     MatTableModule,
-    MatProgressBarModule,
-    MatGridListModule,
+    MatProgressSpinnerModule,
     MatIconModule,
     MatToolbarModule,
     MatDialogModule,

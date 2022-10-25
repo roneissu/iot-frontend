@@ -8,12 +8,30 @@
     </mat-toolbar>
 </p>
 
-<div fxLayout="row wrap" fxLayoutGap="0px" *ngIf="deviceList.length > 0">
+<div fxLayout="row wrap" *ngIf="deviceList === undefined" class="h-100">
+    <div fxLayoutAlign="center center" fxFlex="grow" fxLayout="column">
+        <mat-spinner></mat-spinner>
+        <span class="p-4">Loading devices</span>
+    </div>
+</div>
+
+<div fxLayout="row wrap" *ngIf="deviceList !== undefined && deviceList.length <= 0" class="h-100">
+    <div fxLayoutAlign="center center" fxFlex="grow" fxLayout="column">
+        <span class="p-4">Add a device</span>
+        <button mat-fab color="primary" aria-label="Add device" (click)="openDialog(null)">
+            <mat-icon>add</mat-icon>
+        </button>
+    </div>
+</div>
+
+<div fxLayout="row wrap" fxLayoutGap="0px" *ngIf="deviceList !== undefined && deviceList.length > 0">
     <div fxLayoutAlign="start baseline" fxFlex.xs="grow" *ngFor="let device of deviceList">
-        <mat-card class="m-4" ngClass.xs="w-100">
+        <mat-card class="m-4" ngClass="card-size" ngClass.xs="w-100">
             <mat-card-title-group>
                 <mat-card-title>{{device.alias_name}}</mat-card-title>
-                <mat-card-subtitle>{{getDeviceType(device.device_type).name}}</mat-card-subtitle>
+                <mat-card-subtitle class="mb-2">{{getDeviceType(device.device_type).name}}</mat-card-subtitle>
+                <mat-card-subtitle class="mb-2" aria-label="Serie number">SN: {{device.serie_number}}</mat-card-subtitle>
+                <mat-card-subtitle aria-label="Firmware">FW: {{device.firmware_version}}</mat-card-subtitle>
                 <img mat-card-sm-image
                     [src]="getDeviceType(device.device_type).id > 0 ? 'assets/'+getDeviceType(device.device_type).name+'.svg' : 'assets/health.svg'">
             </mat-card-title-group>
@@ -30,8 +48,9 @@
                     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                 </table>
             </mat-card-content>
-            <mat-card-content *ngIf="getDeviceType(device.device_type).actions.length > 0">
-                <button mat-stroked-button color="primary" *ngFor="let action of getDeviceType(device.device_type).actions">
+            <mat-card-content fxLayout="row wrap" fxLayoutGap="10px" *ngIf="getDeviceType(device.device_type).actions.length > 0">
+                <button mat-stroked-button color="primary" class="mb-2"
+                    *ngFor="let action of getDeviceType(device.device_type).actions">
                     {{action.name}}
                 </button>
             </mat-card-content>
@@ -42,7 +61,6 @@
                 <button mat-icon-button color="primary" (click)="openDialog(device)">
                     <mat-icon>edit</mat-icon>
                 </button>
-                <!-- <mat-progress-bar mode="indeterminate"></mat-progress-bar> -->
             </mat-card-content>
         </mat-card>
     </div>
