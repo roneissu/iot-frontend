@@ -50,7 +50,8 @@
             </mat-card-content>
             <mat-card-content fxLayout="row wrap" fxLayoutGap="10px" *ngIf="getDeviceType(device.device_type).actions.length > 0">
                 <button mat-stroked-button color="primary" class="mb-2"
-                    *ngFor="let action of getDeviceType(device.device_type).actions">
+                    *ngFor="let action of getDeviceType(device.device_type).actions"
+                    (click)="sendCommand(device.id ? device.id : 0, action)">
                     {{action.name}}
                 </button>
             </mat-card-content>

@@ -3,7 +3,7 @@ import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Subject, takeUntil } from 'rxjs';
 import { ToastService } from '../toast/toast.service';
-import { Device, DeviceType } from './device';
+import { Device, DeviceAction, DeviceType } from './device';
 import { DeviceService } from './device.service';
 
 export interface DialogData {
@@ -153,6 +153,15 @@ export class DeviceComponent implements OnInit, OnDestroy {
       return { id: 0, name: '', actions: [], fields: [] };
     }
     return device;
+  }
+
+  sendCommand(id: number, action: DeviceAction) {
+    this.deviceService.sendCommand(id, action.name, action.action_type)
+      .subscribe((response: { result: boolean, message: string } | any) => {
+        if(response.result) {
+          this.toastService.showSuccess(response.message);
+        }
+      })
   }
 
   getDevice(id: number) {

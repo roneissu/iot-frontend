@@ -36,6 +36,10 @@ export class DeviceService {
     return this.http.delete(this.deviceUrl + id);
   }
 
+  sendCommand(id: number, action: string, value: string) {
+    return this.http.post(this.deviceUrl + 'command/' + id, { type: action, value: value });
+  }
+
   getAllTypes() {
     return this.http.get<DeviceType[]>(this.deviceTypeUrl + '');
   }
