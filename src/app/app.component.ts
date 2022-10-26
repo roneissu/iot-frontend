@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
     selector: 'app-root',
@@ -11,13 +12,17 @@ export class AppComponent {
     opened: boolean = false;
     shouldRun = true;
 
-    constructor(private router: Router) {}
+    constructor(
+        private router: Router,
+        private cookieService: CookieService
+    ) {}
 
     changeRun() {
         this.shouldRun = !this.shouldRun;
     }
 
-    openLogin() {
-        this.router.navigate(['/login/']);
+    logout() {
+        this.cookieService.delete('Token_OAuth2.0');
+        this.router.navigateByUrl('/login');
     }
 }

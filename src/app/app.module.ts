@@ -7,6 +7,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { ToastsContainer } from './toast/toast.component';
 import { HomeModule } from './home/home.module';
+import { LoginModule } from './login/login.module';
 import { DeviceModule } from './device/device.module';
 import { ConfigModule } from './config/config.module';
 import { UserModule } from './user/user.module';
@@ -35,6 +36,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     AppRoutingModule,
     HttpClientModule,
     HomeModule,
+    LoginModule,
     DeviceModule,
     ConfigModule,
     UserModule,
