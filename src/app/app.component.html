@@ -8,9 +8,9 @@
         </button>
         <span class="example-spacer"></span>
         <button mat-button *ngIf="user !== undefined" (click)="openUser()">
-            <span>{{user.name}}</span>
-            <span class="mx-3">({{user.email}})</span>
-            <img class="circle mr-3" [src]="user.picture" [alt]="user.name">
+            <span *ngIf="currentScreenSize && (currentScreenSize > 1)" class="mx-2">{{user.name}}</span>
+            <span *ngIf="currentScreenSize && (currentScreenSize > 2)" class="mx-2">({{user.email}})</span>
+            <img class="circle mx-2" [src]="user.picture" [alt]="user.name">
             <mat-icon>arrow_drop_down</mat-icon>
         </button>
         <button mat-icon-button (click)="logout()">
