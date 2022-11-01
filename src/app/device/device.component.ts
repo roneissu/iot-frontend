@@ -1,7 +1,9 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { CookieService } from 'ngx-cookie-service';
 import { Subject, takeUntil } from 'rxjs';
+import { LoginService } from '../login/login.service';
 import { ToastService } from '../toast/toast.service';
 import { Device, DeviceAction, DeviceType } from './device';
 import { DeviceService } from './device.service';
@@ -82,6 +84,8 @@ export class DeviceComponent implements OnInit, OnDestroy {
     private deviceService: DeviceService,
     public dialog: MatDialog,
     private breakpointObserver: BreakpointObserver,
+    private cookieService: CookieService,
+    private loginService: LoginService,
     private toastService: ToastService
   ) {
   }
@@ -202,6 +206,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
       .subscribe((result: Device) => {
         if (result !== undefined) {
           if (result.id === undefined) {
+            result.user_id = Number(this.cookieService.get(this.loginService.COOKIE_ID));
             this.deviceService.addOne(result)
               .subscribe(() => {
                 this.getAllDevices();

@@ -21,6 +21,7 @@ export interface Device {
     id?: number,
     alias_name: string,
     firmware_version: string,
-    serie_number: string
-    device_type: number
+    serie_number: string,
+    device_type: number,
+    user_id?: number
 }

@@ -9,6 +9,7 @@
     left: 0;
     right: 0;
     background: #eee;
+
     mat-sidenav {
         min-width: 260px;
     }
@@ -32,4 +33,11 @@
 .h-calc-total {
     height: calc(100vh - 64px);
     width: 100%;
+}
+
+.circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #673ab7;
 }
