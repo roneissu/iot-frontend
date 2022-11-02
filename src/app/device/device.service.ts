@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
-import { Device, DeviceType } from './device';
+import { Command, Device, DeviceType } from './device';
 
 @Injectable({
   providedIn: 'root'
@@ -36,8 +36,8 @@ export class DeviceService {
     return this.http.delete(this.deviceUrl + id);
   }
 
-  sendCommand(id: number, action: string, value: string) {
-    return this.http.post(this.deviceUrl + 'command/' + id, { type: action, value: value });
+  sendCommand(id: number, command: Command) {
+    return this.http.post(this.deviceUrl + 'command/' + id, command);
   }
 
   getAllTypes() {

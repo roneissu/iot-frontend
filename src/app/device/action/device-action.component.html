@@ -1,0 +1,15 @@
+<h1 mat-dialog-title>Add device</h1>
+<div mat-dialog-content fxLayout="column">
+    <mat-form-field appearance="outline">
+        <mat-label>Name</mat-label>
+        <input matInput placeholder="Name" [(ngModel)]="data.name">
+    </mat-form-field>
+    <mat-form-field appearance="outline" *ngFor="let param of data.params">
+        <mat-label>{{param.name}}:{{param.param_type}}</mat-label>
+        <input matInput placeholder="value" [(ngModel)]="param.value">
+    </mat-form-field>
+</div>
+<div mat-dialog-actions>
+    <button mat-flat-button color="warn" (click)="onNoClick()">Cancel</button>
+    <button mat-flat-button color="primary" [mat-dialog-close]="data" cdkFocusInitial>Send</button>
+</div>

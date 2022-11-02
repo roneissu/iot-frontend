@@ -2,7 +2,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { DeviceRoutingModule } from './device-routing.module';
-import { DeviceComponent, DeviceDialogComponent, ConfirmDialogComponent } from './device.component';
+import { DeviceComponent, ConfirmDialogComponent } from './device.component';
+import { DeviceDialogComponent } from './dialog/device-dialog.component';
+import { DeviceActionComponent } from './action/device-action.component';
 
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -22,6 +24,7 @@ import { FormsModule } from '@angular/forms';
   declarations: [
     DeviceComponent,
     DeviceDialogComponent,
+    DeviceActionComponent,
     ConfirmDialogComponent
   ],
   imports: [

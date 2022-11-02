@@ -1,7 +1,16 @@
+export interface DeviceActionParam {
+    id: number,
+    name: string,
+    param_type: string,
+    order: string,
+    value?: string
+}
+
 export interface DeviceAction {
     id: number,
     name: string,
-    action_type: string
+    action_type: string,
+    params: DeviceActionParam[]
 }
 
 export interface DeviceField {
@@ -24,4 +33,14 @@ export interface Device {
     serie_number: string,
     device_type: number,
     user_id?: number
+}
+
+export interface CommandParam {
+    param_id: number,
+    value: string
+}
+
+export interface Command {
+    command_id: number,
+    params: CommandParam[]
 }

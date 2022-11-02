@@ -5,13 +5,11 @@ import { CookieService } from 'ngx-cookie-service';
 import { Subject, takeUntil } from 'rxjs';
 import { LoginService } from '../login/login.service';
 import { ToastService } from '../toast/toast.service';
-import { Device, DeviceAction, DeviceType } from './device';
+import { DeviceActionComponent } from './action/device-action.component';
+import { Command, CommandParam, Device, DeviceAction, DeviceActionParam, DeviceType } from './device';
 import { DeviceService } from './device.service';
-
-export interface DialogData {
-  device: Device,
-  device_types: DeviceType[]
-}
+import { DialogData } from "./dialog/device-dialog";
+import { DeviceDialogComponent } from './dialog/device-dialog.component';
 
 @Component({
   selector: 'app-confirm-dialog',
@@ -28,30 +26,6 @@ export class ConfirmDialogComponent {
   constructor(
     public dialogRef: MatDialogRef<ConfirmDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: string,
-  ) { }
-
-  onNoClick(): void {
-    this.dialogRef.close();
-  }
-}
-
-@Component({
-  selector: 'app-device-dialog',
-  templateUrl: './device-dialog.component.html',
-  styleUrls: ['./device.component.scss']
-})
-export class DeviceDialogComponent {
-
-  device: Device = {
-    alias_name: '',
-    firmware_version: '',
-    serie_number: '',
-    device_type: 0
-  };
-
-  constructor(
-    public dialogRef: MatDialogRef<DeviceDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData,
   ) { }
 
   onNoClick(): void {
@@ -160,12 +134,28 @@ export class DeviceComponent implements OnInit, OnDestroy {
   }
 
   sendCommand(id: number, action: DeviceAction) {
-    this.deviceService.sendCommand(id, action.name, action.action_type)
-      .subscribe((response: { result: boolean, message: string } | any) => {
-        if(response.result) {
-          this.toastService.showSuccess(response.message);
+    const dialogRef = this.dialog.open(DeviceActionComponent, {
+      width: '500px',
+      data: action
+    });
+
+    dialogRef.afterClosed()
+      .subscribe((result: DeviceAction) => {
+        if (result !== undefined) {
+          let params: CommandParam[] = [];
+          result.params.forEach((param: DeviceActionParam) => { params.push({ param_id: param.id, value: param.value || "" }) })
+          let command: Command = {
+            command_id: result.id,
+            params: params
+          }
+          this.deviceService.sendCommand(id, command)
+            .subscribe((response: { result: boolean, message: string } | any) => {
+              if (response.result) {
+                this.toastService.showSuccess(response.message);
+              }
+            });
         }
-      })
+      });
   }
 
   getDevice(id: number) {
