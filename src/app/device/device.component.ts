@@ -120,9 +120,8 @@ export class DeviceComponent implements OnInit, OnDestroy {
     this.deviceService.getAllTypes()
       .subscribe((data: DeviceType[]) => {
         this.deviceTypeList = data;
-      }).add(() => {
         this.getAllDevices();
-      })
+      });
   }
 
   getDeviceType(id: number): DeviceType {
