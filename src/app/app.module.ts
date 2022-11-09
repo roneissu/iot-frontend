@@ -27,6 +27,9 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AuthInterceptor } from './http-interceptors/auth-interceptor';
 import { AuthGuard } from './auth/auth.guard';
+import { SocketIoConfig, SocketIoModule } from 'ngx-socket-io';
+
+const config: SocketIoConfig = { url: 'http://localhost:5000', options: {} };
 
 @NgModule({
   declarations: [
@@ -55,7 +58,8 @@ import { AuthGuard } from './auth/auth.guard';
     MatNativeDateModule,
     MatTableModule,
     MatProgressBarModule,
-    NgbModule
+    NgbModule,
+    SocketIoModule.forRoot(config)
   ],
   providers: [
     AuthGuard,

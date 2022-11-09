@@ -16,7 +16,8 @@ export interface DeviceAction {
 export interface DeviceField {
     id: number,
     name: string,
-    field_type: string
+    field_type: string,
+    value: any
 }
 
 export interface DeviceType {
