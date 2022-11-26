@@ -1,16 +1,17 @@
 <header>
     <mat-toolbar class="mat-elevation-z10" color="primary">
-        <button (click)="opened = !opened" mat-icon-button aria-label="Example icon-button with menu icon">
+        <button (click)="opened = !opened" mat-icon-button aria-label="Example icon-button with menu icon"
+            *ngIf="getLoggedIn() != undefined">
             <mat-icon>menu</mat-icon>
         </button>
-        <button mat-button (click)="openHome()">
+        <button mat-button routerLink="/" (click)="opened = false">
             <h1>{{title}}</h1>
         </button>
         <span class="example-spacer"></span>
-        <button mat-button *ngIf="user !== undefined" (click)="openUser()">
-            <span *ngIf="currentScreenSize && (currentScreenSize > 1)" class="mx-2">{{user.name}}</span>
-            <span *ngIf="currentScreenSize && (currentScreenSize > 2)" class="mx-2">({{user.email}})</span>
-            <img class="circle mx-2" [src]="user.picture" [alt]="user.name">
+        <button mat-button *ngIf="getLoggedIn() !== undefined" routerLink="/user" (click)="opened = false">
+            <span *ngIf="currentScreenSize && (currentScreenSize > 1)" class="mx-2">{{getLoggedIn()?.name}}</span>
+            <span *ngIf="currentScreenSize && (currentScreenSize > 2)" class="mx-2">({{getLoggedIn()?.email}})</span>
+            <img class="circle mx-2" [src]="getLoggedIn()?.picture" [alt]="getLoggedIn()?.name">
             <mat-icon>arrow_drop_down</mat-icon>
         </button>
         <button mat-icon-button (click)="logout()">
@@ -20,12 +21,13 @@
 </header>
 
 <mat-sidenav-container class="example-container">
-    <mat-sidenav mode="over" [opened]="opened">
+    <mat-sidenav mode="over" [opened]="opened" *ngIf="getLoggedIn() != undefined" (click)="opened = !opened">
         <mat-nav-list class="mat-nav-list mat-list-base">
-            <a mat-list-item href="home" class="abc mat-list-item mat-focus-indicator"><span>Home</span></a>
-            <a mat-list-item href="device" class="abc mat-list-item mat-focus-indicator"><span>Devices</span></a>
-            <a mat-list-item href="user" class="abc mat-list-item mat-focus-indicator"><span>Users</span></a>
-            <a mat-list-item href="config" class="abc mat-list-item mat-focus-indicator"><span>Configurations</span></a>
+            <a mat-list-item routerLink="/" class="abc mat-list-item mat-focus-indicator"><span>Home</span></a>
+            <a mat-list-item routerLink="/device" class="abc mat-list-item mat-focus-indicator"><span>Devices</span></a>
+            <a mat-list-item routerLink="/user" class="abc mat-list-item mat-focus-indicator"><span>Users</span></a>
+            <a mat-list-item routerLink="/config"
+                class="abc mat-list-item mat-focus-indicator"><span>Configurations</span></a>
         </mat-nav-list>
     </mat-sidenav>
     <mat-sidenav-content class="bg-light h-calc-total">

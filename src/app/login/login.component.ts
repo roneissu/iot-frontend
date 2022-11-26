@@ -31,7 +31,6 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-
     google.accounts.id.initialize({
       client_id: environment.googleClientId,
       callback: (response: CredentialResponse) => {
@@ -50,7 +49,7 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
                   this.cookieService.set(this.loginService.COOKIE_EMAIL, response.email);
                   this.cookieService.set(this.loginService.COOKIE_NAME, response.name);
                   this.cookieService.set(this.loginService.COOKIE_PICTURE, response.picture);
-                  this.router.navigateByUrl('/home');
+                  this.router.navigateByUrl('/device');
                 }
               },
               error: (error: HttpErrorResponse) => {
@@ -61,10 +60,12 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
         })
       }
     });
+
     google.accounts.id.renderButton(
       document.getElementById("buttonDiv"),
       { theme: "outline", size: "large" }
     );
+
     google.accounts.id.prompt();
   }
 

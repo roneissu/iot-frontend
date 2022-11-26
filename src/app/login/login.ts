@@ -9,3 +9,10 @@ export interface LoginResponse {
     name: string,
     picture: string
 }
+
+export interface LoginUser {
+    id: string,
+    email: string,
+    name: string,
+    picture: string
+};
