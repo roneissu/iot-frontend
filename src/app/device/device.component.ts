@@ -43,7 +43,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
   destroyed = new Subject<void>();
   currentScreenSize: number | undefined;
 
-  displayedColumns: string[] = ['name', 'field_type', 'value'];
+  displayedColumns: string[] = ['name', 'value', 'unit'];
   deviceList: Device[] | undefined;
   deviceTypeList: DeviceType[] = [];
 

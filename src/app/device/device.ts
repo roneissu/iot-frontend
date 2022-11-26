@@ -17,6 +17,7 @@ export interface DeviceField {
     id: number,
     name: string,
     field_type: string,
+    unit: string,
     value: any
 }
 
