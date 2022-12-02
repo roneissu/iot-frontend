@@ -1,0 +1,162 @@
+<mat-toolbar>
+    <span>Device types</span>
+    <span class="toolbar-spacer"></span>
+    <button mat-fab color="primary" aria-label="Add device type" (click)="changeType('ADD')">
+        <mat-icon>add</mat-icon>
+    </button>
+</mat-toolbar>
+
+<div *ngIf="deviceTypes.length > 0" class="admin-container">
+    <div class="table-container">
+        <mat-card>
+            <table mat-table [dataSource]="deviceTypes" class="mat-elevation-z8">
+                <ng-container matColumnDef="id">
+                    <th mat-header-cell *matHeaderCellDef> No. </th>
+                    <td mat-cell *matCellDef="let deviceType"> {{deviceType.id}} </td>
+                </ng-container>
+        
+                <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef> Name </th>
+                    <td mat-cell *matCellDef="let deviceType"> {{deviceType.name}} </td>
+                </ng-container>
+        
+                <ng-container matColumnDef="operations">
+                    <th mat-header-cell *matHeaderCellDef></th>
+                    <td mat-cell *matCellDef="let deviceType" class="table-buttons">
+                        <button mat-mini-fab color="primary" (click)="changeType('EDIT', deviceType)">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                    </td>
+                </ng-container>
+        
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+        </mat-card>
+    </div>
+
+    <div class="card-container">
+        <mat-card *ngIf="editing.id == 0">Selecione um tipo de dispositivo para editar ou adicione um novo.</mat-card>
+        <mat-card *ngIf="editing.id != 0">
+            <h1>{{editing.id > 0 ? 'Edit' : 'New'}}</h1>
+            <div class="card-name-container">
+                <mat-form-field appearance="outline" style="flex-grow: 1;">
+                    <mat-label>Name</mat-label>
+                    <input matInput [(ngModel)]="editing.name">
+                </mat-form-field>
+                <div style="margin-bottom: 1.34375em;">
+                    <button mat-raised-button color="success" style="margin-left: 16px;" (click)="changeType('SAVE', editing)">
+                        Save <mat-icon>save</mat-icon>
+                    </button>
+                    <button mat-raised-button color="warn" style="margin-left: 16px;" (click)="changeType('REMOVE', editing)" *ngIf="editing.id > 0">
+                        Delete <mat-icon>delete</mat-icon>
+                    </button>
+                    <button mat-raised-button color="accent" style="margin-left: 16px;" (click)="cancelEditing()">
+                        Cancel <mat-icon>cancel</mat-icon>
+                    </button>
+                </div>
+            </div>
+            <mat-accordion class="example-headers-align" multi>
+                <mat-expansion-panel [disabled]="editing.id <= 0" [(expanded)]="expanded[0]">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            Actions
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+    
+                    <div *ngFor="let action of editing.actions; index as idx;" style="display: flex; flex-direction: column; flex-wrap: wrap; padding-bottom: 32px;">
+                        <div style="flex-grow: 1; display: flex; align-items: baseline; width: 100%;">
+                            <div style="flex-grow: 1; display: flex; width: calc(100% - 112px);">
+                                <mat-form-field appearance="outline" style="padding: 0 16px 0 0; width: 50%;">
+                                    <mat-label>Name</mat-label>
+                                    <input matInput [(ngModel)]="action.name">
+                                </mat-form-field>
+                                <mat-form-field appearance="outline" style="padding: 0; width: 50%;">
+                                    <mat-label>Function</mat-label>
+                                    <input matInput [(ngModel)]="action.function">
+                                </mat-form-field>
+                            </div>
+    
+                            <button mat-mini-fab color="success" style="margin-left: 16px;" (click)="changeAction(editing, 'SAVE', idx)">
+                                <mat-icon>check</mat-icon>
+                            </button>
+                            <button mat-mini-fab color="warn" style="margin-left: 16px;" (click)="changeAction(editing, 'REMOVE', idx)">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </div>
+    
+                        <div style="flex-grow: 1; display: flex; flex-wrap: wrap; flex-direction: column; padding-left: 32px;" >
+                            <div style="flex-grow: 1; display: flex; align-items: baseline;" *ngFor="let param of action.params; index as param_idx">
+                                <div style="flex-grow: 1; flex-wrap: wrap; display: flex;">
+                                    <mat-form-field appearance="outline" style="padding: 0 16px 0 0; width: 50%;">
+                                        <mat-label>Parameter</mat-label>
+                                        <input matInput [(ngModel)]="param.name">
+                                    </mat-form-field>
+                                    <mat-form-field appearance="outline" style="padding: 0; width: 50%;">
+                                        <mat-label>Type</mat-label>
+                                        <mat-select [(value)]="param.param_type">
+                                          <mat-option *ngFor="let field_type of field_types" [value]="field_type">{{field_type}}</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+        
+                                <button mat-mini-fab color="success" style="margin-left: 16px;" (click)="changeParam(editing, 'SAVE', idx, param_idx)">
+                                    <mat-icon>check</mat-icon>
+                                </button>
+                                <button mat-mini-fab color="warn" style="margin-left: 16px;" (click)="changeParam(editing, 'REMOVE', idx, param_idx)">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </div>
+        
+                            <button mat-raised-button color="primary" (click)="changeParam(editing, 'ADD', idx)" [disabled]="action.id <= 0">
+                                Add parameter <mat-icon>add</mat-icon>
+                            </button>
+                        </div>
+                    </div>
+    
+                    <button mat-raised-button color="primary" (click)="changeAction(editing, 'ADD')">
+                        Add action <mat-icon>add</mat-icon>
+                    </button>
+                </mat-expansion-panel>
+        
+                <mat-expansion-panel [disabled]="editing.id <= 0" [(expanded)]="expanded[1]">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            Fields
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+    
+                    <div *ngFor="let field of editing.fields; index as idx" style="display: flex; align-items: baseline; width: 100%;">
+                        <div style="flex-grow: 1; display: flex; width: calc(100% - 112px);">
+                            <mat-form-field appearance="outline" style="padding: 0 16px 0 0; width: 40%;">
+                                <mat-label>Name</mat-label>
+                                <input matInput [(ngModel)]="field.name">
+                            </mat-form-field>
+                            <mat-form-field appearance="outline" style="padding: 0 16px 0 0; width: 40%;">
+                                <mat-label>Type</mat-label>
+                                <mat-select [(value)]="field.field_type">
+                                  <mat-option *ngFor="let field_type of field_types" [value]="field_type">{{field_type}}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field appearance="outline" style="padding: 0; width: 20%;">
+                                <mat-label>Unit</mat-label>
+                                <input matInput [(ngModel)]="field.unit">
+                            </mat-form-field>
+                        </div>
+
+                        <button mat-mini-fab color="success" style="margin-left: 16px;" (click)="changeField('SAVE', editing, idx)">
+                            <mat-icon>check</mat-icon>
+                        </button>
+                        <button mat-mini-fab color="warn" style="margin-left: 16px;" (click)="changeField('REMOVE', editing, idx)">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </div>
+
+                    <button mat-raised-button color="primary" (click)="changeField('ADD', editing)">
+                        Add parameter<mat-icon>add</mat-icon>
+                    </button>
+                </mat-expansion-panel>
+            </mat-accordion>
+        </mat-card>
+    </div>
+</div>

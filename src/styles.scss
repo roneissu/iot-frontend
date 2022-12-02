@@ -5,3 +5,8 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 /* Importing Bootstrap SCSS file. */
 @import 'node_modules/bootstrap/scss/bootstrap';
+
+.mat-success {
+    background-color: green;
+    color: #fff;
+}

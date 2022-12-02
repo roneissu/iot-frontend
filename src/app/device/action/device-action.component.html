@@ -6,7 +6,7 @@
     </mat-form-field>
     <mat-form-field appearance="outline" *ngFor="let param of data.params">
         <mat-label>{{param.name}}:{{param.param_type}}</mat-label>
-        <input matInput placeholder="value" [(ngModel)]="param.value">
+        <input matInput [type]="param.param_type" placeholder="value" [(ngModel)]="param.value">
     </mat-form-field>
 </div>
 <div mat-dialog-actions>

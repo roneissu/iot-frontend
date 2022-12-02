@@ -28,6 +28,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AuthInterceptor } from './http-interceptors/auth-interceptor';
 import { AuthGuard } from './auth/auth.guard';
 import { SocketIoConfig, SocketIoModule } from 'ngx-socket-io';
+import { AdminModule } from './admin/admin.module';
 
 const config: SocketIoConfig = { url: 'http://localhost:5000', options: {} };
 
@@ -45,6 +46,7 @@ const config: SocketIoConfig = { url: 'http://localhost:5000', options: {} };
     DeviceModule,
     ConfigModule,
     UserModule,
+    AdminModule,
     BrowserAnimationsModule,
     MatToolbarModule,
     MatIconModule,

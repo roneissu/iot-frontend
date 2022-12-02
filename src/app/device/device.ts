@@ -2,15 +2,16 @@ export interface DeviceActionParam {
     id: number,
     name: string,
     param_type: string,
-    order: string,
+    action: number,
     value?: string
 }
 
 export interface DeviceAction {
     id: number,
     name: string,
-    action_type: string,
-    params: DeviceActionParam[]
+    function: string,
+    params: DeviceActionParam[],
+    device_type?: number
 }
 
 export interface DeviceField {
@@ -18,7 +19,8 @@ export interface DeviceField {
     name: string,
     field_type: string,
     unit: string,
-    value: any
+    value: any,
+    device_type: number
 }
 
 export interface DeviceType {
