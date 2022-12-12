@@ -69,6 +69,13 @@ export class DeviceComponent implements OnInit, OnDestroy {
     this.socket.on("connect", () => {
       console.log("Connected");
     });
+    this.socket.on("command", (data: { "command": string, "serie_number": string, "result": string }) => {
+      if (data.result === "ok") {
+        let device = this.deviceList?.find(d => d.serie_number === data.serie_number);
+        let command = this.getDeviceType(device?.device_type || 0).actions.find(a => a.function === data.command)
+        this.toastService.showSuccess(`Comando ${command?.name} executado no dispositivo ${device?.alias_name} com sucesso!`);
+      }
+    });
     this.socket.on("values", (data: { "msg": { "serie_number": string, "name": string, "value": any } }) => {
       let devType: number | undefined = this.deviceList?.find(device => device.serie_number === data.msg.serie_number)?.device_type;
       if (devType) {
